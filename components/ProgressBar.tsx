@@ -1,9 +1,9 @@
 import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
 import {StyleSheet, View, Text, Pressable} from 'react-native';
 import PanContainer from './PanContainer';
-import {ProgressBarProps, SeekState} from './types';
-import constants from './constants';
-import utils from './utils';
+import {ProgressBarProps, SeekState} from '../types';
+import constants from '../constants';
+import utils from '../utils';
 
 const ProgressBar: FC<ProgressBarProps> = (props) => {
   const [seekState, setSeekState] = useState<SeekState>({
@@ -87,7 +87,7 @@ const ProgressBar: FC<ProgressBarProps> = (props) => {
     }
 
     // Needs to called beforehand, since props.onSeek will cause the playbackStatusUpdate
-    // event to get received before isGranded === true.
+    // event to get received before isGranted === true.
     setSeekState((s) => {
       return {...s};
     });
@@ -171,7 +171,7 @@ const ProgressBar: FC<ProgressBarProps> = (props) => {
         height: fullTrackHeight,
         borderRadius: 100,
         borderWidth: 2,
-        borderColor: props.color,
+        borderColor: props.iconColor,
       },
       progressTrack: {
         position: 'absolute',
@@ -180,7 +180,7 @@ const ProgressBar: FC<ProgressBarProps> = (props) => {
         width: progressRatio * fullTrackWidth,
         height: (baseWidth * constants.SMALL_ICON_SCALE) / 4,
         borderRadius: 100,
-        backgroundColor: props.color,
+        backgroundColor: props.iconColor,
       },
       dotContainer: {
         position: 'absolute',
@@ -198,7 +198,7 @@ const ProgressBar: FC<ProgressBarProps> = (props) => {
         width: (baseWidth * constants.SMALL_ICON_SCALE) / 1.5,
         height: (baseWidth * constants.SMALL_ICON_SCALE) / 1.5,
         borderRadius: 100,
-        backgroundColor: props.color,
+        backgroundColor: props.iconColor,
       },
       timeContainer: {
         position: 'absolute',
@@ -207,16 +207,6 @@ const ProgressBar: FC<ProgressBarProps> = (props) => {
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-      },
-      positionTime: {
-        fontSize: 12,
-        fontWeight: 'bold',
-        color: props.color,
-      },
-      durationTime: {
-        fontSize: 12,
-        fontWeight: 'bold',
-        color: props.color,
       },
     });
   }, [props, seekState]);
@@ -229,14 +219,14 @@ const ProgressBar: FC<ProgressBarProps> = (props) => {
 
         <View style={styles.timeContainer}>
           {/* Position */}
-          <Text style={styles.positionTime}>
+          <Text style={props.textStyle}>
             {utils.other.formatProgressBarTime(
               props.playbackStatus?.positionMillis || 0,
             )}
           </Text>
 
           {/* Duration */}
-          <Text style={styles.durationTime}>
+          <Text style={props.textStyle}>
             {utils.other.formatProgressBarTime(
               props.playbackStatus?.durationMillis || 0,
             )}

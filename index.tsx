@@ -1,14 +1,15 @@
 import React, {useMemo, useState, useRef} from 'react';
 import {Dimensions, StyleSheet, Platform} from 'react-native';
-import Overlay from './Overlay';
-import ParentContainer from './ParentContainer';
+import Overlay from './components/Overlay';
+import ParentContainer from './components/ParentContainer';
 import {
   AnotherVideoPlayerProps,
   VideoDimensions,
   AVPlaybackStatus,
 } from './types';
+import constants from './constants';
 import res from './res';
-import utils from './utils/other';
+import utils from './utils';
 import Orientation from 'react-native-orientation';
 
 var {width: initialScreenWidth, height: initialScreenHeight} = Dimensions.get(
@@ -16,9 +17,12 @@ var {width: initialScreenWidth, height: initialScreenHeight} = Dimensions.get(
 );
 
 const defaultProps: AnotherVideoPlayerProps = {
-  color: res.colors.WHITE,
+  textStyle: res.styles.TEXT_STYLE,
+  iconColor: res.colors.WHITE,
   overlayColor: res.colors.BLACK,
   overlayOpacity: 0.25,
+  overlayActiveMillis: constants.OVERLAY_ACTIVE_MILLIS,
+  overlayFadeMillis: constants.OVERLAY_FADE_MILLIS,
   forceHorizontalFullscreen: false,
 };
 
@@ -35,8 +39,6 @@ export default (WrappedComponent: React.ElementType) => {
       width: 0,
       height: 0,
     });
-
-    console.log('props', props);
 
     const videoRef = useRef<any>(null);
 
@@ -63,14 +65,6 @@ export default (WrappedComponent: React.ElementType) => {
       if (_playbackStatus.isLoaded) {
         setPlaybackStatus(_playbackStatus);
       }
-    }
-
-    function onReadyForDisplay(data: any) {
-      props.onReadyForDisplay?.(data);
-    }
-
-    function onFullscreenUpdate(data: any) {
-      props.onFullscreenUpdate?.(data);
     }
 
     function onPressBackward() {
@@ -134,30 +128,15 @@ export default (WrappedComponent: React.ElementType) => {
     }
 
     function onPressFullscreen() {
-      if (props.useNativeControls) {
-        videoRef.current.presentFullscreenPlayer?.();
-      } else if (isFullscreen) {
-        if (!utils.isLivestream(playbackStatus)) {
-          setIsPlaybackInSync(false);
-        }
-
-        if (props.forceHorizontalFullscreen) {
-          Orientation.lockToPortrait();
-          Orientation.unlockAllOrientations();
-        }
-
-        setIsFullscreen(false);
-      } else {
-        if (!utils.isLivestream(playbackStatus)) {
-          setIsPlaybackInSync(false);
-        }
-
-        if (props.forceHorizontalFullscreen) {
-          Orientation.lockToLandscapeRight();
-        }
-
-        setIsFullscreen(true);
+      if (!utils.other.isLivestream(playbackStatus)) {
+        setIsPlaybackInSync(false);
       }
+
+      if (props.forceHorizontalFullscreen) {
+        Orientation.lockToLandscapeRight();
+      }
+
+      setIsFullscreen(true);
     }
 
     function onContainerLayout(event: any) {
@@ -223,65 +202,40 @@ export default (WrappedComponent: React.ElementType) => {
       }
     }
 
-    const styles = useMemo(() => {
-      var container: any;
-
-      if (isFullscreen) {
-        container = {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          justifyContent: 'center',
-          backgroundColor: res.colors.BLACK,
-        };
-      } else {
-        container = {
-          flex: 1,
-        };
-      }
-
-      return StyleSheet.create({
-        container,
-      });
-    }, [isFullscreen]);
-
     return (
       <ParentContainer
-        style={styles.container}
+        style={isFullscreen ? res.styles.FULLSCREEN_CONTAINER : res.styles.CONTAINER}
         onLayout={onContainerLayout}
         isFullscreen={isFullscreen}
         onRequestClose={() => setIsFullscreen(false)}>
         <WrappedComponent
           {...props}
-          style={!isFullscreen ? props.style : {width: '100%', height: '100%'}}
+          style={!isFullscreen ? props.style : res.styles.VIDEO}
           ref={_handleVideoRef}
           onPlaybackStatusUpdate={onPlaybackStatusUpdate}
-          onReadyForDisplay={onReadyForDisplay}
-          onFullscreenUpdate={onFullscreenUpdate}
-          rate={props.rate}
           shouldPlay={isPlaybackInSync && props.shouldPlay}
         />
-        {!props.useNativeControls && (
-          <Overlay
-            playbackStatus={playbackStatus}
-            isFullscreen={isFullscreen}
-            videoDimensions={videoDimensions}
-            color={props.color}
-            overlayColor={props.overlayColor}
-            overlayOpacity={props.overlayOpacity}
-            avoidSafeAreas={props.avoidSafeAreas}
-            onPressBackward={onPressBackward}
-            onPressForward={onPressForward}
-            onPressPlay={onPressPlay}
-            onPressPause={onPressPause}
-            onPressVolume={onPressVolume}
-            onPressSettings={props.onPressSettings}
-            onPressFullscreen={onPressFullscreen}
-            onSeek={onSeek}
-          />
-        )}
+
+        <Overlay
+          playbackStatus={playbackStatus}
+          isFullscreen={isFullscreen}
+          videoDimensions={videoDimensions}
+          textStyle={props.textStyle}
+          iconColor={props.iconColor}
+          overlayColor={props.overlayColor}
+          overlayOpacity={props.overlayOpacity}
+          overlayActiveMillis={props.overlayActiveMillis}
+          overlayDurationMillis={props.overlayFadeMillis}
+          avoidSafeAreas={props.avoidSafeAreas}
+          onPressBackward={onPressBackward}
+          onPressForward={onPressForward}
+          onPressPlay={onPressPlay}
+          onPressPause={onPressPause}
+          onPressVolume={onPressVolume}
+          onPressSettings={props.onPressSettings}
+          onPressFullscreen={onPressFullscreen}
+          onSeek={onSeek}
+        />
       </ParentContainer>
     );
   };

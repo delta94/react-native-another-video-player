@@ -1,8 +1,8 @@
 import React, {FC, useMemo} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import {LivestreamBarProps} from './types';
-import constants from './constants';
-import screen from './utils/screen';
+import {LivestreamBarProps} from '../types';
+import constants from '../constants';
+import screen from '../utils/screen';
 
 const LivestreamBar: FC<LivestreamBarProps> = (props) => {
   const styles = useMemo(() => {

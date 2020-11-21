@@ -51,6 +51,8 @@ Set of props relative to the video player wrapper. The Video component props fro
 * [color](#color)
 * [overlayColor](#overlayColor)
 * [overlayOpacity](#overlayOpacity)
+* [overlayActiveMillis](#overlayActiveMillis)
+* [overlayFadeMillis](#overlayFadeMillis)
 * [seekMillis](#seekMillis)
 * [useSeekControls](#useSeekControls)
 * [forceHorizontalFullscreen](#forceHorizontalFullscreen)
@@ -64,25 +66,49 @@ Set of props relative to the video player wrapper. The Video component props fro
 #### color
 A string value to determine the color of icons and text.
 
+* **(default)** - #FFFFFF
+
 #### overlayColor
 A string value to determine the color of the overlay.
+
+* **(default)** - #FFFFFF
 
 #### overlayOpacity
 A number value (float) to determine the opacity of the overlay.
 
+* **(default)** - 0.25
+
+#### overlayActiveMillis
+A number value to determine the duration of the overlay active state.
+
+* **(default)** - 5000
+
+#### overlayFadeMillis
+A number value to determine the duration of the overlay fade animation.
+
+* **(default)** - 250
+
 #### seekMillis
 A number value to determine amount of milliseconds to skip when seeking back or forward.
+
+* **(default)** - duration * 0.1
 
 #### useSeekControls
 A boolean value to determine if the seek controls should be available.
 
+* **(default)** - true
+
 #### forceHorizontalFullscreen
 A boolean value to determine if fullscreen mode should automatically rotate the device orientation to landscape.
+
+* **(default)** - false
 
 #### avoidSafeAreas
 A boolean value to determine if iOS safe areas should be avoided by the different overlay elements.
 
+* **(default)** - true
+
 ### Event props
 
 #### onPressSettings
-Callback function that is called when the settings cog wheel is pressed.
+Callback function that is called when the settings cog wheel is pressed. If the prop isn't set, the cog wheel won't be displayed.

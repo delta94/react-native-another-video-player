@@ -1,12 +1,13 @@
-import {ViewStyle} from 'react-native';
+import {TextStyle, ViewStyle} from 'react-native';
 
-export interface AnotherVideoPlayerProps extends VideoProps {
+export interface AnotherVideoPlayerProps {
   style?: ViewStyle;
-
-  color?: string; // Text and icons.
+  textStyle?: TextStyle;
+  iconColor?: string;
   overlayColor?: string;
   overlayOpacity?: number;
-
+  overlayActiveMillis?: number;
+  overlayFadeMillis?: number;
   seekMillis?: number;
   useSeekControls?: boolean;
   forceHorizontalFullscreen?: boolean;
@@ -19,11 +20,12 @@ export interface OverlayProps {
   playbackStatus?: AVPlaybackStatus;
   isFullscreen: boolean;
   videoDimensions: VideoDimensions;
-
-  color?: string; // Text and icons.
+  textStyle?: TextStyle;
+  iconColor?: string;
   overlayColor?: string;
   overlayOpacity?: number;
-
+  overlayActiveMillis?: number;
+  overlayFadeMillis?: number;
   avoidSafeAreas?: boolean;
 
   onPressBack?: () => void;
@@ -43,8 +45,8 @@ export interface ProgressBarProps {
   playbackStatus?: AVPlaybackStatus;
   videoDimensions: VideoDimensions;
   hasSettings: boolean;
-
-  color?: string;
+  textStyle?: string;
+  iconColor?: string;
 
   fadeIn: (keepOverlayActive?: boolean) => void;
   onSeek: (positionMillis: number) => Promise<AVPlaybackStatus>;
@@ -54,8 +56,8 @@ export interface LivestreamBarProps {
   isFullscreen?: boolean;
   avoidSafeAreas?: boolean;
   videoDimensions: VideoDimensions;
-
-  color?: string;
+  textStyle?: string;
+  iconColor?: string;
 }
 
 export declare type AVPlaybackStatus = {

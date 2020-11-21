@@ -7,13 +7,13 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import res from './res';
-import constants from './constants';
-import {OverlayProps} from './types';
+import res from '../res';
+import constants from '../constants';
+import {OverlayProps} from '../types';
 import {SvgXml} from 'react-native-svg';
 import ProgressBar from './ProgressBar';
 import LivestreamBar from './LivestreamBar';
-import utils from './utils';
+import utils from '../utils';
 import {MaterialIndicator} from 'react-native-indicators';
 
 const Overlay: FC<OverlayProps> = (props) => {
@@ -58,7 +58,7 @@ const Overlay: FC<OverlayProps> = (props) => {
         clearTimeout(fadeOutTimeout.current);
         fadeOutTimeout.current = setTimeout(
           fadeOut,
-          constants.OVERLAY_ACTIVE_DURATION,
+          props.overlayActiveMillis,
         );
       }
     });
@@ -71,7 +71,7 @@ const Overlay: FC<OverlayProps> = (props) => {
       fadeAnim.setValue(value);
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: (1 - value) * constants.OVERLAY_FADE_DURATION,
+        duration: (1 - value) * props.overlayFadeMillis,
         easing: Easing.linear,
         useNativeDriver: false,
       }).start(() => {
@@ -79,7 +79,7 @@ const Overlay: FC<OverlayProps> = (props) => {
           clearTimeout(fadeOutTimeout.current);
           fadeOutTimeout.current = setTimeout(
             fadeOut,
-            constants.OVERLAY_ACTIVE_DURATION,
+            props.overlayActiveMillis,
           );
         }
       });
@@ -91,7 +91,7 @@ const Overlay: FC<OverlayProps> = (props) => {
       fadeAnim.setValue(value);
       Animated.timing(fadeAnim, {
         toValue: 0,
-        duration: value * constants.OVERLAY_FADE_DURATION,
+        duration: value * props.overlayFadeMillis,
         easing: Easing.linear,
         useNativeDriver: false,
       }).start();
@@ -166,9 +166,6 @@ const Overlay: FC<OverlayProps> = (props) => {
       fadeIn();
       return;
     }
-
-    // We call fadeImmedeatly in the respective useEffect.
-    // fadeIn();
 
     props.onPressFullscreen?.();
   }
@@ -313,7 +310,7 @@ const Overlay: FC<OverlayProps> = (props) => {
             width={baseWidth * constants.MEDIUM_ICON_SCALE}
             height={baseWidth * constants.MEDIUM_ICON_SCALE}
             xml={res.images.BACKWARD_SVG}
-            fill={props.color}
+            fill={props.iconColor}
           />
         </TouchableOpacity>
       )}
@@ -324,7 +321,7 @@ const Overlay: FC<OverlayProps> = (props) => {
             width={baseWidth * constants.MEDIUM_ICON_SCALE}
             height={baseWidth * constants.MEDIUM_ICON_SCALE}
             xml={res.images.FORWARD_SVG}
-            fill={props.color}
+            fill={props.iconColor}
           />
         </TouchableOpacity>
       )}
@@ -337,7 +334,7 @@ const Overlay: FC<OverlayProps> = (props) => {
               width={baseWidth * constants.BIG_ICON_SCALE}
               height={baseWidth * constants.BIG_ICON_SCALE}
               xml={res.images.PLAY_SVG}
-              fill={props.color}
+              fill={props.iconColor}
             />
           </TouchableOpacity>
         )}
@@ -350,7 +347,7 @@ const Overlay: FC<OverlayProps> = (props) => {
               width={baseWidth * constants.BIG_ICON_SCALE}
               height={baseWidth * constants.BIG_ICON_SCALE}
               xml={res.images.PAUSE_SVG}
-              fill={props.color}
+              fill={props.iconColor}
             />
           </TouchableOpacity>
         )}
@@ -359,7 +356,7 @@ const Overlay: FC<OverlayProps> = (props) => {
         props.playbackStatus?.isBuffering) && (
         <View style={styles.center}>
           <MaterialIndicator
-            color={props.color}
+            color={props.iconColor}
             size={baseWidth * constants.BIG_ICON_SCALE}
             trackWidth={5}
           />
@@ -375,7 +372,7 @@ const Overlay: FC<OverlayProps> = (props) => {
               ? res.images.VOLUME_MUTE_SVG
               : res.images.VOLUME_UP_SVG
           }
-          fill={props.color}
+          fill={props.iconColor}
         />
       </TouchableOpacity>
 
@@ -385,7 +382,7 @@ const Overlay: FC<OverlayProps> = (props) => {
             width={baseWidth * constants.SMALL_ICON_SCALE}
             height={baseWidth * constants.SMALL_ICON_SCALE}
             xml={res.images.COG_SVG}
-            fill={props.color}
+            fill={props.iconColor}
           />
         </TouchableOpacity>
       )}
@@ -397,7 +394,7 @@ const Overlay: FC<OverlayProps> = (props) => {
           xml={
             props.isFullscreen ? res.images.COMPRESS_SVG : res.images.EXPAND_SVG
           }
-          fill={props.color}
+          fill={props.iconColor}
         />
       </TouchableOpacity>
 
@@ -408,7 +405,8 @@ const Overlay: FC<OverlayProps> = (props) => {
           avoidSafeAreas={props.avoidSafeAreas}
           playbackStatus={props.playbackStatus}
           videoDimensions={props.videoDimensions}
-          color={props.color}
+          textStyle={props.textStyle}
+          iconColor={props.iconColor}
           fadeIn={fadeIn}
           onSeek={props.onSeek}
           hasSettings={!!props.onPressSettings}
@@ -418,7 +416,7 @@ const Overlay: FC<OverlayProps> = (props) => {
           isFullscreen={props.isFullscreen}
           avoidSafeAreas={props.avoidSafeAreas}
           videoDimensions={props.videoDimensions}
-          color={props.color}
+          iconColor={props.iconColor}
         />
       ) : (
         <></>

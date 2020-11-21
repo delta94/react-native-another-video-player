@@ -1,0 +1,34 @@
+{
+  "name": "react-native-another-video-player",
+  "version": "1.0.0",
+  "description": "A customizable video player wrapper for the the Video component of the expo-av package.",
+  "main": "index.tsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pedromarta/react-native-another-video-player.git"
+  },
+  "keywords": [
+    "expo-av",
+    "video",
+    "player",
+    "wrapper",
+    "controls",
+    "media"
+  ],
+  "author": "Pedro Marta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pedromarta/react-native-another-video-player/issues"
+  },
+  "homepage": "https://github.com/pedromarta/react-native-another-video-player#readme",
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-native": "^0.63.3",
+    "react-native-indicators": "^0.17.0",
+    "react-native-orientation": "^3.1.3",
+    "react-native-svg": "^12.1.0"
+  }
+}
