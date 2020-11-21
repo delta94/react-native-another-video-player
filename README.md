@@ -20,7 +20,7 @@ yarn add react-native-another-video-player
 
 ```javascript
 // Load the Video module
-import Video from 'react-native-video';
+import {Video} from 'expo-av';
 
 // Load the wrapper module
 import wrapper from 'react-native-another-video-player';
@@ -31,12 +31,11 @@ const AnotherVideoPlayer = wrapper(Video)
 <AnotherVideoPlayer
     style={{height: 200, width: '100%', backgroundColor: 'black'}}
     source={{
-    uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+        uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
     }}
     shouldPlay={true}
     isLooping={true}
     isMuted={false}
-    resizeMode={'contain'}
     onPressSettings={() => {}}
     forceHorizontalFullscreen={true}
     avoidSafeAreas={true}

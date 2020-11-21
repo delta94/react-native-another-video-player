@@ -1,5 +1,5 @@
-import React, {useMemo, useState, useRef} from 'react';
-import {Dimensions, StyleSheet, Platform} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {Dimensions, Platform} from 'react-native';
 import Overlay from './components/Overlay';
 import ParentContainer from './components/ParentContainer';
 import {
